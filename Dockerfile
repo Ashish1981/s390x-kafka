@@ -36,14 +36,11 @@ RUN apt-get update && apt-get full-upgrade -y && apt install -y \
     build-essential  \
     && chmod a+x /tmp/*.sh \
     && cp -rf /tmp/*.sh /usr/bin/ \
-    && download-kafka.sh \
+    && wget https://mirrors.estointernet.in/apache/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz -O /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz \
     && tar xfz /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz -C /opt \
     && rm /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz \
     && ln -s /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION} ${KAFKA_HOME} \
-    # && tar xfz /tmp/zookeeper-${ZOOKEEPER_VERSION}-bin.tgz -C /opt \
-    # && rm /tmp/zookeeper-${ZOOKEEPER_VERSION}.tgz \
-    # && 
-    && mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor
+    && mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor/
 
 COPY overrides /opt/overrides
 
