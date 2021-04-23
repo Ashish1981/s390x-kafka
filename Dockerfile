@@ -39,10 +39,23 @@ RUN apt-get update && apt-get full-upgrade -y && apt install -y \
     && wget https://mirrors.estointernet.in/apache/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz -O /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz \
     && tar xfz /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz -C /opt \
     && rm /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz \
-    && ln -s /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION} ${KAFKA_HOME} \
-    && mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor/
+    && ln -s /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION} ${KAFKA_HOME} 
+    
+# Use tini as subreaper in Docker container to adopt zombie processes
+ARG TINI_VERSION=v0.19.0
+COPY tini_pub.gpg ${KAFKA_HOME}/tini_pub.gpg
+RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture) -o /sbin/tini \
+    && curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture).asc -o /sbin/tini.asc \
+    && gpg --no-tty --import ${KAFKA_HOME}/tini_pub.gpg \
+    && gpg --verify /sbin/tini.asc \
+    && rm -rf /sbin/tini.asc /root/.gnupg \
+    && chmod +x /sbin/tini
+COPY tini-shim.sh /bin/tini
+RUN chmod +x /bin/tini
 
-COPY overrides /opt/overrides
+COPY /supervisor/supervisord.conf /etc/supervisord.conf
+RUN chmod 777 /etc/supervisord.conf
+RUN && mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor/
 
 VOLUME ["/kafka"]
 
@@ -55,4 +68,5 @@ ADD supervisor/kafka.conf supervisor/zookeeper.conf /etc/supervisor/conf.d/
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181 9092
 
-CMD ["supervisord", "-n"]
+# CMD ["supervisord", "-n"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
