@@ -43,7 +43,7 @@ RUN apt-get update && apt-get full-upgrade -y && apt install -y \
     # && tar xfz /tmp/zookeeper-${ZOOKEEPER_VERSION}-bin.tgz -C /opt \
     # && rm /tmp/zookeeper-${ZOOKEEPER_VERSION}.tgz \
     # && 
-    && chmod a+w /var/log/supervisor
+    && mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor
 
 COPY overrides /opt/overrides
 
