@@ -26,7 +26,7 @@ ENV KAFKA_VERSION=$kafka_version \
 
 ADD /*.sh /tmp/
 USER root
-RUN apt update && apt full-upgrade -y && apt install -y \
+RUN apt-get update && apt-get full-upgrade -y && apt install -y \
     supervisor \
     curl \
     jq \
