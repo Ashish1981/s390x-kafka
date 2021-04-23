@@ -55,7 +55,7 @@ RUN chmod +x /bin/tini
 
 COPY /supervisor/supervisord.conf /etc/supervisord.conf
 RUN chmod 777 /etc/supervisord.conf
-RUN mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor/
+RUN mkdir -p /var/log/supervisord && chmod a+w /var/log/supervisord/
 
 VOLUME ["/kafka"]
 
@@ -63,7 +63,7 @@ VOLUME ["/kafka"]
 #ADD scripts/start-kafka.sh /usr/bin/start-kafka.sh
 
 # Supervisor config
-ADD supervisor/kafka.conf supervisor/zookeeper.conf /etc/supervisor/conf.d/
+# ADD supervisor/kafka.conf supervisor/zookeeper.conf /etc/supervisor/conf.d/
 
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181 9092
