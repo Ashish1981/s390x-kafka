@@ -55,7 +55,7 @@ RUN chmod +x /bin/tini
 
 COPY /supervisor/supervisord.conf /etc/supervisord.conf
 RUN chmod 777 /etc/supervisord.conf
-RUN && mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor/
+RUN mkdir -p /var/log/supervisor && chmod a+w /var/log/supervisor/
 
 VOLUME ["/kafka"]
 
