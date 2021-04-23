@@ -1,13 +1,11 @@
 FROM docker.io/ibmjava
 
-
 ARG kafka_version=2.7.0
 ARG scala_version=2.13
 ARG glibc_version=2.31-r0
 ARG vcs_ref=unspecified
 ARG build_date=unspecified
 # ARG zookeeper_version=3.7.0
-
 LABEL org.label-schema.name="kafka" \
       org.label-schema.description="Apache Kafka" \
       org.label-schema.build-date="${build_date}" \
@@ -57,16 +55,11 @@ COPY /supervisor/supervisord.conf /etc/supervisord.conf
 RUN chmod 777 /etc/supervisord.conf
 RUN mkdir -p /var/log/supervisord && chmod a+w /var/log/supervisord/
 
-VOLUME ["/kafka"]
-
-
+# VOLUME ["/kafka"]
 #ADD scripts/start-kafka.sh /usr/bin/start-kafka.sh
-
 # Supervisor config
 # ADD supervisor/kafka.conf supervisor/zookeeper.conf /etc/supervisor/conf.d/
-
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181 9092
-
 # CMD ["supervisord", "-n"]
 ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
