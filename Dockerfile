@@ -55,6 +55,7 @@ COPY /supervisor/supervisord.conf /etc/supervisord.conf
 RUN chmod 777 /etc/supervisord.conf
 RUN mkdir -p /var/log/supervisord && chmod a+w /var/log/supervisord/
 
+COPY /server.properties $KAFKA_HOME/config/server.properties
 # VOLUME ["/kafka"]
 #ADD scripts/start-kafka.sh /usr/bin/start-kafka.sh
 # Supervisor config
