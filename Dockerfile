@@ -53,7 +53,11 @@ RUN chmod +x /bin/tini
 
 COPY /supervisor/supervisord.conf /etc/supervisord.conf
 RUN chmod 777 /etc/supervisord.conf
-RUN mkdir -p /var/log/supervisord && chmod a+w /var/log/supervisord/
+RUN mkdir -p /var/log/supervisord \
+    && chmod a+w /var/log/supervisord/ \
+    && mkdir -p /opt/kafka/logs \
+    && chmod a+w /opt/kafka/logs
+
 
 COPY /server.properties $KAFKA_HOME/config/server.properties
 # VOLUME ["/kafka"]
