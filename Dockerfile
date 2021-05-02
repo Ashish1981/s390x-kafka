@@ -5,6 +5,7 @@ ARG scala_version=2.13
 ARG glibc_version=2.31-r0
 ARG vcs_ref=unspecified
 ARG build_date=unspecified
+ARG LOG_DIR=/tmp
 # ARG zookeeper_version=3.7.0
 LABEL org.label-schema.name="kafka" \
       org.label-schema.description="Apache Kafka" \
