@@ -72,4 +72,4 @@
 # fi
 
 # Run Kafka
-$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+KAFKA_HEAP_OPTS="-Xms512m -Xmx1g" $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
